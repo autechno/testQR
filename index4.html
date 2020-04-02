@@ -117,7 +117,7 @@
         let that = this;
         for (let i = 0; i !== deviceInfos.length; ++i) {
           let deviceInfo = deviceInfos[i];
-          if (deviceInfo.kind === 'audiooutput') {
+          if (deviceInfo.kind === 'audiooutput' || deviceInfo.kind === 'audioutput') {
             // 音频设备
           } else if (deviceInfo.kind === 'videoinput') {
             // 视频设备
