@@ -72,6 +72,7 @@
       },
       getStream() {
         let that = this;
+        console.log(this, 'this123')
         if (window.stream) {
           window.stream.getTracks().forEach((track) => {
             track.stop();
