@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>测试扫描器</title>
-  <script src="https://cdn.bootcss.com/vConsole/3.2.0/vconsole.min.js"></script>
+  <!-- <script src="https://cdn.bootcss.com/vConsole/3.2.0/vconsole.min.js"></script> -->
   <script type="text/javascript" src="./llqrcode.js"></script>
   <script>
-    let vConsole = new VConsole();
+    // let vConsole = new VConsole();
   </script>
     <style>
     #scan {
@@ -78,33 +78,33 @@
             track.stop();
           });
         }
-        if(that.isIOS()){
-             let constraints = {
-                 video: { facingMode: { exact: "environment" } }
-               };
-             console.log('3: ', constraints);
-             // let constraints = {
-             //   video: {
-             //     // environment表示后置摄像头
-             //     // user表示前置摄像头
-             //     facingMode: ("environment")
-             //   }
-             // };
-        }else{
+        // if(that.isIOS){
+        //     let constraints = {
+        //         video: { facingMode: { exact: "environment" } }
+        //       };
+        //     console.log('3: ', constraints);
+        //     // let constraints = {
+        //     //   video: {
+        //     //     // environment表示后置摄像头
+        //     //     // user表示前置摄像头
+        //     //     facingMode: ("environment")
+        //     //   }
+        //     // };
+        // }else{
         let constraints = {
           // 包含audio 可声明音频设备调用
           // 声明视频设备调用
-          video: true,
-          video: {
-            deviceId: {
-              // [1].deviceId 表示后置摄像头,默认开启的是前置摄像头
-              exact: that.videoInputDevice[0].deviceId
-            }
-          }
+          // video: true
+          // video: {
+          //   deviceId: {
+          //     // [1].deviceId 表示后置摄像头,默认开启的是前置摄像头
+          //     exact: that.videoInputDevice[0].deviceId
+          //   }
+          // }
           // 'audio': true,
-          // video: { facingMode: { exact: 'environment' } }
+          video: { facingMode: { exact: 'environment' } }
         };
-        }
+        // }
         // 视频设备初始化
         navigator.mediaDevices.getUserMedia(constraints).then(that.gotStream.bind(that)).catch(that.handleError.bind(that));
         that.captureToCanvas();
