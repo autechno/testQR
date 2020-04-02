@@ -41,11 +41,14 @@
 </head>
 
 <body>
-    <div id="output"></div>
+  <div id="output"></div>
   <!-- 由于llqrcode.js中写死了id，所以id必须为qr-canvas -->
-    <video id="video" muted autoplay playsinline width="300" height="200"></video>
-    <canvas id="qr-canvas" style="display:none;"></canvas>
-    <a href="javascript:;" id="scan">扫码</a>
+  <div>
+    <video id="video" muted autoplay playsinline width="300" height="200"></video>
+  </div>
+  <canvas id="qr-canvas" style="display:none;"></canvas>
+  <a href="javascript:;" id="scan">扫码</a>
+
   <script type="text/javascript">
     const Scan = {
       videoInputDevice: [],
@@ -66,7 +69,7 @@
             that.videoInputDevice.push(deviceInfo);
           } else {
             // 其他设备
-            console.log('Found one other kind of source/device: ', deviceInfo);
+            console.log('不支持此设备: ', deviceInfo);
           }
         }
       },
@@ -81,22 +84,11 @@
         if (that.isIOS()) {
           constraints = {
             video: {
-              facingMode: ("environment")
-              // facingMode: { exact: 'environment' }
+              facingMode: ('environment')
             }
           };
-          console.log('我是ios');
-          // let constraints = {
-          //   video: {
-          //     // environment表示后置摄像头
-          //     // user表示前置摄像头
-          //     facingMode: ("environment")
-          //   }
-          // };
         } else {
-          console.log('我是安卓', that, that.videoInputDevice[1].deviceId)
           constraints = {
-            // video: true,
             video: {
               deviceId: {
                 // [1].deviceId 表示后置摄像头,默认开启的是前置摄像头
@@ -105,7 +97,6 @@
             }
           };
         }
-        console.log(constraints, 'constraints')
         // 视频设备初始化
         navigator.mediaDevices.getUserMedia(constraints).then(that.gotStream.bind(that)).catch(that.handleError.bind(that));
         that.captureToCanvas();
