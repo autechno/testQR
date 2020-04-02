@@ -72,16 +72,18 @@
       },
       getStream() {
         let that = this;
-        console.log(this, 'this123')
         if (window.stream) {
           window.stream.getTracks().forEach((track) => {
             track.stop();
           });
         }
-        console.log(that.isIOS, that.isIOS(), '12111')
+        let constraints = null
         if (that.isIOS()) {
-          let constraints = {
-            video: { facingMode: { exact: 'environment' } }
+          constraints = {
+            video: {
+              facingMode: ("environment")
+              // facingMode: { exact: 'environment' }
+            }
           };
           console.log('我是ios');
           // let constraints = {
@@ -93,20 +95,17 @@
           // };
         } else {
           console.log('我是安卓', that)
-          let constraints = {
-            // 包含audio 可声明音频设备调用
-            // 声明视频设备调用
-            video: true,
+          constraints = {
+            // video: true,
             video: {
               deviceId: {
                 // [1].deviceId 表示后置摄像头,默认开启的是前置摄像头
-                exact: that.videoInputDevice[0].deviceId
+                exact: that.videoInputDevice[1].deviceId
               }
             }
-            // 'audio': true,
-            // video: { facingMode: { exact: 'environment' } }
           };
         }
+        console.log(constraints, 'constraints')
         // 视频设备初始化
         navigator.mediaDevices.getUserMedia(constraints).then(that.gotStream.bind(that)).catch(that.handleError.bind(that));
         that.captureToCanvas();
