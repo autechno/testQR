@@ -121,10 +121,11 @@
             // 音频设备
           } else if (deviceInfo.kind === 'videoinput') {
             // 视频设备
-            that.videoInputDevice.push(deviceInfo);
+            that.videoInputDevice.push(deviceInfo)
           } else {
-            // 其他设备
-            console.log('不支持此设备: ', deviceInfo);
+            // 其他设备 或者用户没有给授权摄像头
+            that.videoWrap.style.display = 'none'
+            console.log('不支持此设备: ', deviceInfo)
           }
         }
       },
@@ -168,75 +169,75 @@
         } catch (e) {
           console.log('1:' + e);
         };
-        that.decodeTimer = setTimeout(that.decode.bind(that), 100); // 解码频率为100毫秒一次
+        that.decodeTimer = setTimeout(that.decode.bind(that), 100) // 解码频率为100毫秒一次
       },
       //将视频流放到画布
       captureToCanvas() {
-        let that = this;
+        let that = this
         try {
           // 根据视频大小设置canvas大小
-          let w = that.videoElement.videoWidth;
-          let h = that.videoElement.videoHeight;
-          that.canvasElement.width = w;
-          that.canvasElement.height = h;
-          that.canvasContext.drawImage(that.videoElement, 0, 0, w, h);
+          let w = that.videoElement.videoWidth
+          let h = that.videoElement.videoHeight
+          that.canvasElement.width = w
+          that.canvasElement.height = h
+          that.canvasContext.drawImage(that.videoElement, 0, 0, w, h)
         } catch (e) {
-          console.log(e);
+          console.log(e)
         };
         // 100毫秒绘制一次
-        that.canvasTimer = setTimeout(that.captureToCanvas.bind(that), 100);
+        that.canvasTimer = setTimeout(that.captureToCanvas.bind(that), 100)
       },
       handleError(error) {
-        console.log('Error: ', error);
+        console.log('Error: ', error)
       },
       gotStream(stream) {
-        let that = this;
-        window.stream = stream; // make stream available to console
-        that.videoElement.srcObject = stream;
+        let that = this
+        window.stream = stream // make stream available to console
+        that.videoElement.srcObject = stream
       },
       isIOS() {
-        var u = navigator.userAgent;
-        var IOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        var u = navigator.userAgent
+        var IOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) //ios终端
         if (IOS) {
-          return true;
+          return true
         } else {
-          return false;
+          return false
         }
       },
       init() {
-        let that = this;
+        let that = this
         // API参考
         // https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices/enumerateDevices
         // 先获取设备列表，方便调用后置摄像头
         if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices()) return console.log('该设备不支持，或协议不是https')
-        let devices = navigator.mediaDevices.enumerateDevices().then(that.gotDevices.bind(that));
+        let devices = navigator.mediaDevices.enumerateDevices().then(that.gotDevices.bind(that))
         document.querySelector('#scan').addEventListener('click', () => {
-          document.getElementById('output').innerHTML = '';
-          that.videoElement.style.display = 'block';
-          that.videoWrap.style.display = 'flex';
-          // that.canvasElement.style.display = 'block';
-          that.videoElement.play();
-          devices.then(that.getStream.bind(that)).catch(that.handleError.bind(that));
-          that.canvasContext.clearRect(0, 0, 300, 200);
+          document.getElementById('output').innerHTML = ''
+          that.videoElement.style.display = 'block'
+          that.videoWrap.style.display = 'flex'
+          // that.canvasElement.style.display = 'block'
+          that.videoElement.play()
+          devices.then(that.getStream.bind(that)).catch(that.handleError.bind(that))
+          that.canvasContext.clearRect(0, 0, 300, 200)
           //结果回调
           qrcode.callback = (e) => {
             // 清除画布，停止摄像头
-            clearTimeout(that.decodeTimer);
-            clearTimeout(that.canvasTimer);
-            that.canvasContext.clearRect(0, 0, 300, 200);
+            clearTimeout(that.decodeTimer)
+            clearTimeout(that.canvasTimer)
+            that.canvasContext.clearRect(0, 0, 300, 200)
             if (window.stream) {
               window.stream.getTracks().forEach((track) => {
-                track.stop();
-              });
+                track.stop()
+              })
             }
-            that.videoElement.style.display = 'none';
-            that.videoWrap.style.display = 'none';
-            that.canvasElement.style.display = 'none';
+            that.videoElement.style.display = 'none'
+            that.videoWrap.style.display = 'none'
+            that.canvasElement.style.display = 'none'
             if (e.indexOf("http") != -1) {
               console.log(e,'112233')
-              window.location.href = e + '&token=xxxx';
+              window.location.href = e + '&token=xxxx'
             } else {
-              document.getElementById('output').innerHTML = '结果：' + e;
+              document.getElementById('output').innerHTML = '结果：' + e
             }
           }
         });
