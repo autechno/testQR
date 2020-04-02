@@ -167,7 +167,7 @@
         try {
           qrcode.decode();
         } catch (e) {
-          console.log('1:' + e);
+          // console.log('1:' + e);
         };
         that.decodeTimer = setTimeout(that.decode.bind(that), 100) // 解码频率为100毫秒一次
       },
