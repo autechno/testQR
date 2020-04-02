@@ -35,7 +35,7 @@
     }
     .video_bg {
       background: #000;
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
       width: 100%;
@@ -94,7 +94,7 @@
 <body>
   <div id="output"></div>
   <!-- 由于llqrcode.js中写死了id，所以id必须为qr-canvas -->
-  <div class="video_bg">
+  <div id="video_bg" class="video_bg">
     <div class="video_wrap">
       <video id="video" muted autoplay playsinline></video>
       <p class="scanning"></p>
@@ -108,6 +108,7 @@
       videoInputDevice: [],
       videoElement: document.getElementById("video"),
       canvasElement: document.getElementById("qr-canvas"),
+      videoWrap: document.getElementById("video_bg"),
       decodeTimer: null,
       canvasTimer: null,
       canvasContext: document.getElementById("qr-canvas").getContext("2d"),
@@ -142,6 +143,9 @@
             }
           };
         } else {
+          if (!that.videoInputDevice || !that.videoInputDevice[1] || !that.videoInputDevice[1].deviceId) {
+            return console.log('摄像头等id信息不存在')
+          }
           constraints = {
             video: {
               deviceId: {
@@ -204,10 +208,12 @@
         // API参考
         // https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices/enumerateDevices
         // 先获取设备列表，方便调用后置摄像头
+        if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices()) return console.log('该设备不支持，或协议不是https')
         let devices = navigator.mediaDevices.enumerateDevices().then(that.gotDevices.bind(that));
         document.querySelector('#scan').addEventListener('click', () => {
           document.getElementById('output').innerHTML = '';
           that.videoElement.style.display = 'block';
+          that.videoWrap.style.display = 'flex';
           // that.canvasElement.style.display = 'block';
           that.videoElement.play();
           devices.then(that.getStream.bind(that)).catch(that.handleError.bind(that));
@@ -224,8 +230,10 @@
               });
             }
             that.videoElement.style.display = 'none';
+            that.videoWrap.style.display = 'none';
             that.canvasElement.style.display = 'none';
             if (e.indexOf("http") != -1) {
+              console.log(e,'112233')
               window.location.href = e + '&token=xxxx';
             } else {
               document.getElementById('output').innerHTML = '结果：' + e;
