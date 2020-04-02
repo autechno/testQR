@@ -188,7 +188,8 @@
         that.canvasTimer = setTimeout(that.captureToCanvas.bind(that), 100)
       },
       handleError(error) {
-        console.log('Error: ', error)
+        console.log('Error: ', error.message)
+        document.getElementById("video_bg").style.display = 'none'
       },
       gotStream(stream) {
         let that = this
